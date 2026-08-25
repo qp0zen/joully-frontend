@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const SERVER_URL = 'http://2.26.86.113:8000'; // Твой IP сервера
+    // Заменяем старый IP на новый безопасный адрес
+    const SERVER_URL = 'https://joully.ru';
   
     const authContainer = document.getElementById('authContainer');
     const loginSection = document.getElementById('loginSection');
