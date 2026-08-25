@@ -1,0 +1,690 @@
+/* ==========================================
+   1. ПЕРЕМЕННЫЕ И БАЗОВЫЙ СБРОС (ТЕМА DISCORD)
+   ========================================== */
+   :root {
+    --dc-main-bg: #313338;       
+    --dc-sidebar-bg: #2b2d31;    
+    --dc-search-bg: #1e1f22;     
+    --dc-input-bg: #383a40;      
+    --dc-blurple: #5865f2;       
+    --dc-text-light: #f2f3f5;    
+    --dc-text-muted: #949ba4;    
+    --dc-text-chat: #dbdee1;     
+    --dc-online: #23a55a;        
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  
+  body {
+    background-color: var(--dc-main-bg);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+  }
+  
+  /* ==========================================
+     2. ГЛАВНЫЙ КОНТЕЙНЕР ИНТЕРФЕЙСА
+     ========================================== */
+  .chat-interface {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0;
+    animation: chatFadeIn 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+  }
+  
+  @keyframes chatFadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* ==========================================
+     3. БОКОВАЯ ПАНЕЛЬ (СПИСОК КАНАЛОВ / БОТОВ)
+     ========================================== */
+  .chat-sidebar {
+    width: 280px; /* Расширенная боковая панель по твоей просьбе */
+    background-color: var(--dc-sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar-search {
+    padding: 12px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  
+  .sidebar-search input {
+    width: 100%;
+    height: 28px;
+    background-color: var(--dc-search-bg);
+    border: none;
+    border-radius: 4px;
+    color: var(--dc-text-light);
+    padding: 0 10px;
+    font-size: 13px;
+    outline: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  .sidebar-search input::placeholder {
+    color: #6d6f78;
+  }
+  
+  .channels-list {
+    flex: 1;
+    padding: 8px;
+    overflow-y: auto;
+  }
+  
+  .channel-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 2px;
+    transition: background-color 0.15s ease;
+  }
+  
+  .channel-item:hover {
+    background-color: rgba(78, 80, 88, 0.2);
+  }
+  
+  .channel-item.active {
+    background-color: rgba(78, 80, 88, 0.4);
+  }
+  
+  .bot-avatar-wrapper {
+    position: relative;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .bot-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--dc-search-bg);
+    object-fit: contain;
+  }
+  
+  .status-online {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: var(--dc-online);
+    border-radius: 50%;
+    bottom: -2px;
+    right: -2px;
+    border: 2px solid var(--dc-sidebar-bg);
+  }
+  
+  .channel-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .channel-name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+  }
+  
+  .channel-name {
+    color: var(--dc-text-light);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .bot-badge {
+    background-color: var(--dc-blurple);
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  
+  .channel-preview {
+    color: var(--dc-text-muted);
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* ==========================================
+     4. ОСНОВНОЕ ОКНО ЧАТА И ШАПКА
+     ========================================== */
+  .chat-window {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--dc-main-bg);
+  }
+  
+  .chat-topbar {
+    height: 48px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    user-select: none;
+  }
+  
+  .topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .hashtag {
+    color: #80848e;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .topbar-user h4 {
+    color: var(--dc-text-light);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  
+  /* ==========================================
+     5. ВЬЮПОРТ СООБЩЕНИЙ (ЛЕНТА)
+     ========================================== */
+  .messages-viewport {
+    flex: 1;
+    padding: 16px 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  
+  .messages-viewport::-webkit-scrollbar {
+    width: 8px;
+  }
+  .messages-viewport::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .messages-viewport::-webkit-scrollbar-thumb {
+    background: #1e1f22;
+    border-radius: 4px;
+  }
+  
+  .chat-message {
+    display: flex;
+    align-items: flex-start;
+    animation: msgAppear 0.2s ease-out forwards;
+  }
+  
+  @keyframes msgAppear {
+    0% { opacity: 0; transform: translateY(4px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  .msg-avatar-area {
+    margin-right: 16px;
+    flex-shrink: 0;
+  }
+  
+  .msg-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--dc-search-bg);
+    object-fit: contain;
+  }
+  
+  .msg-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .msg-meta {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  
+  .msg-author {
+    color: var(--dc-text-light);
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 4px;
+  }
+  
+  .msg-author.bot {
+    color: #40a0ff; 
+  }
+  
+  .msg-bot-tag {
+    background-color: var(--dc-blurple);
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 3px;
+    border-radius: 3px;
+    margin-right: 8px;
+    user-select: none;
+  }
+  
+  .msg-time {
+    color: var(--dc-text-muted);
+    font-size: 11px;
+    user-select: none;
+  }
+  
+  .msg-text {
+    color: var(--dc-text-chat);
+    font-size: 15px;
+    line-height: 1.375;
+    word-break: break-word; 
+  }
+  
+  /* ==========================================
+     6. НИЖНЯЯ ПАНЕЛЬ ВВОДА СООБЩЕНИЯ
+     ========================================== */
+  .chat-input-area {
+    padding: 0 16px 24px 16px;
+  }
+  
+  .message-input-form input {
+    width: 100%;
+    height: 44px;
+    background-color: var(--dc-input-bg);
+    border: none;
+    border-radius: 8px;
+    color: var(--dc-text-chat);
+    padding: 0 16px;
+    font-size: 15px;
+    outline: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  .message-input-form input:focus {
+    background-color: #404249; 
+  }
+  
+  .message-input-form input::placeholder {
+    color: #6d6f78;
+  }
+  
+  /* ==========================================
+     7. ПАНЕЛЬ ПРОФИЛЯ ПОЛЬЗОВАТЕЛЯ (НИЗ СИДБАРА)
+     ========================================== */
+  .sidebar-profile {
+    height: 52px;
+    background-color: #232428; 
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto; 
+    user-select: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+    max-width: 200px;
+  }
+  
+  .profile-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--dc-blurple);
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  
+  .profile-meta {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .profile-username {
+    color: var(--dc-text-light);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .profile-status {
+    color: var(--dc-text-muted);
+    font-size: 11px;
+    line-height: 13px;
+  }
+  
+  .settings-btn {
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: #b5bac1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  
+  .settings-btn:hover {
+    background-color: rgba(78, 80, 88, 0.3);
+    color: var(--dc-text-light);
+  }
+  
+  .settings-btn svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
+  }
+  
+  .settings-btn:hover svg {
+    transform: rotate(45deg);
+  }
+  
+  .settings-btn:active svg {
+    transform: scale(0.9) rotate(30deg);
+  }
+  
+  /* ==========================================
+   8. МОДАЛЬНОЕ ОКНО НАСТРОЕК (ДИСКОРД ТЕМА)
+   ========================================== */
+.settings-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 1;
+    transition: opacity 0.25s ease;
+  }
+  
+  .settings-modal.modal-hidden {
+    display: none !important;
+    opacity: 0;
+  }
+  
+  .modal-card {
+    background-color: #313338;
+    width: 480px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: modalScaleUp 0.2s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+  }
+  
+  @keyframes modalScaleUp {
+    0% { transform: scale(0.93) translateY(10px); }
+    100% { transform: scale(1) translateY(0); }
+  }
+  
+  .modal-header {
+    padding: 16px;
+    background-color: #2b2d31;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-header h3 {
+    color: var(--dc-text-light);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .close-modal-btn {
+    background: transparent;
+    border: none;
+    color: var(--dc-text-muted);
+    font-size: 26px;
+    cursor: pointer;
+    line-height: 20px;
+    transition: color 0.15s;
+  }
+  
+  .close-modal-btn:hover {
+    color: var(--dc-text-light);
+  }
+  
+  .modal-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Секция аватарки внутри модалки */
+  .settings-avatar-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: #2b2d31;
+    padding: 16px;
+    border-radius: 8px;
+  }
+  
+  .avatar-preview-container {
+    position: relative;
+  }
+  
+  .modal-avatar-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: var(--dc-blurple);
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .avatar-upload-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .upload-btn {
+    background-color: var(--dc-blurple);
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.15s;
+  }
+  
+  .upload-btn:hover {
+    background-color: #4752c4;
+  }
+  
+  .upload-hint {
+    color: var(--dc-text-muted);
+    font-size: 12px;
+  }
+  
+  /* Поля ввода в модалке */
+  .modal-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .modal-input-group label {
+    color: var(--dc-text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  
+  .modal-input-group input {
+    width: 100%;
+    height: 40px;
+    background-color: #1e1f22;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    color: var(--dc-text-light);
+    padding: 0 12px;
+    font-size: 15px;
+    outline: none;
+  }
+  
+  .modal-input-group input:focus {
+    border-color: var(--dc-blurple);
+  }
+  
+  /* Футер модалки */
+  .modal-footer {
+    padding: 16px;
+    background-color: #2b2d31;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  
+  .save-btn {
+    background-color: #23a55a;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+  }
+  
+  .save-btn:hover {
+    background-color: #1a7f43;
+  }
+  
+  .logout-btn {
+    background: transparent;
+    border: 1px solid #da373c;
+    color: #da373c;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+  }
+  
+  .logout-btn:hover {
+    background-color: #da373c;
+    color: white;
+  }
+
+  /* ==========================================
+   9. СТИЛИ ДЛЯ ВЫПАДАЮЩЕГО ПОИСКА ЮЗЕРОВ
+   ========================================== */
+.search-results-dropdown {
+    position: absolute;
+    top: 44px;
+    left: 12px;
+    width: calc(100% - 24px);
+    background-color: #111214;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    z-index: 200;
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 4px;
+  }
+  
+  .search-results-dropdown.hidden {
+    display: none !important;
+  }
+  
+  .search-result-user {
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+  }
+  
+  .search-result-user:hover {
+    background-color: var(--dc-blurple);
+  }
+  
+  .search-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #2b2d31;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .search-name {
+    color: var(--dc-text-light);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  
