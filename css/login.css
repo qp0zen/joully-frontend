@@ -1,0 +1,303 @@
+/* ==========================================
+   1. ПЕРЕМЕННЫЕ И НАСТРОЙКИ ПО УМОЛЧАНИЮ
+   ========================================== */
+   :root {
+    --dc-card-bg: rgba(49, 51, 56, 0.93); 
+    --dc-input-bg: #1e1f22;
+    --dc-btn-blurple: #5865f2;
+    --dc-btn-hover: #4752c4;
+    --dc-text-header: #f2f3f5;
+    --dc-text-sub: #b5bac1;
+    --dc-link-blue: #00a8fc;
+    --dc-required-red: #fa777c;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  
+  body {
+    background-color: #1e1f22;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  /* ==========================================
+     2. КРАСИВЫЙ АНИМИРОВАННЫЙ ФОН ДИСКОРДА
+     ========================================= */
+  .discord-bg-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e1f22 0%, #2b2d31 100%);
+    z-index: 1;
+    overflow: hidden;
+  }
+  
+  .discord-artwork-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://website-files.com'), 
+                      url('https://website-files.com');
+    background-position: left bottom, right bottom;
+    background-repeat: no-repeat;
+    background-size: 350px, 380px; 
+    opacity: 0.8;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+  }
+  
+  .bg-blur-sphere {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    animation: floatAnimation 12s infinite alternate ease-in-out;
+  }
+  
+  .sphere-1 {
+    width: 500px;
+    height: 500px;
+    background: var(--dc-btn-blurple);
+    top: -10%;
+    left: -10%;
+  }
+  
+  .sphere-2 {
+    width: 600px;
+    height: 600px;
+    background: #f47fff; 
+    bottom: -20%;
+    right: -10%;
+    animation-delay: -4s;
+  }
+  
+  @keyframes floatAnimation {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(40px) scale(1.15); }
+  }
+  
+  /* ==========================================
+     3. БРЕНДИНГ В ЛЕВОМ ВЕРХНЕМ УГЛУ
+     ========================================== */
+  .top-left-brand {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+    user-select: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .top-left-brand:hover {
+    transform: translateY(-1px);
+  }
+  
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.2));
+  }
+  
+  .brand-text {
+    color: var(--dc-text-header);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    /* Глубокий футуристичный шрифт, встроенный в современные системы */
+    font-family: "Cabinet Grotesk", "Inter", system-ui, sans-serif;
+    background: linear-gradient(135deg, #ffffff 40%, #b5bac1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* ==========================================
+     4. КАРТОЧКА АВТОРИЗАЦИИ (БЕЗ QR)
+     ========================================== */
+  @keyframes discordFadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.96) translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  
+  .auth-card {
+    background-color: var(--dc-card-bg);
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px);
+    width: 480px; /* Сузили карточку, так как QR больше нет */
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+    animation: discordFadeIn 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+    user-select: none;
+    z-index: 5;
+  }
+  
+  .auth-form-container {
+    width: 100%;
+  }
+  
+  /* Текст заголовков */
+  .auth-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  .auth-header h2 {
+    color: var(--dc-text-header);
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  
+  .auth-header p {
+    color: var(--dc-text-sub);
+    font-size: 16px;
+  }
+  
+  /* Поля формы */
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .input-group label {
+    display: block;
+    color: var(--dc-text-sub);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  
+  .input-group .required {
+    color: var(--dc-required-red);
+  }
+  
+  .input-group input {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    background-color: var(--dc-input-bg);
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    color: var(--dc-text-header);
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .input-group input:focus {
+    border-color: var(--dc-btn-blurple);
+    box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.2);
+  }
+  
+  .forgot-link {
+    display: inline-block;
+    color: var(--dc-link-blue);
+    font-size: 14px;
+    text-decoration: none;
+    margin-top: 8px;
+    transition: opacity 0.2s;
+  }
+  
+  .forgot-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Кнопка */
+  .submit-btn {
+    width: 100%;
+    height: 44px;
+    background-color: var(--dc-btn-blurple);
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 8px;
+    margin-bottom: 10px;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  }
+  
+  .submit-btn:hover {
+    background-color: var(--dc-btn-hover);
+    box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+  }
+  
+  .submit-btn:active {
+    transform: scale(0.98);
+  }
+  
+  .auth-footer {
+    font-size: 14px;
+  }
+  
+  .auth-footer span {
+    color: #949ba4;
+  }
+  
+  .register-link {
+    color: var(--dc-link-blue);
+    text-decoration: none;
+    margin-left: 4px;
+  }
+  
+  .register-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* ==========================================
+     5. АДАПТИВНОСТЬ
+     ========================================== */
+  @media (max-width: 930px) {
+    .discord-artwork-overlay {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .auth-card {
+      width: 90%;
+      padding: 24px;
+    }
+    .top-left-brand {
+      top: 16px;
+      left: 16px;
+    }
+    .brand-text {
+      font-size: 18px;
+    }
+  }
+
+  /* Класс для скрытия элементов с плавной прозрачностью */
+.auth-form-container {
+  opacity: 1;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.auth-form-container.hidden {
+  display: none;
+  opacity: 0;
+  transform: scale(0.95);
+}
