@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joully | Авторизация</title>
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+  <!-- Фон Discord -->
+  <div class="discord-bg-wrapper">
+    <div class="bg-blur-sphere sphere-1"></div>
+    <div class="bg-blur-sphere sphere-2"></div>
+    <div class="discord-artwork-overlay"></div>
+  </div>
+
+  <!-- Брендинг в углу -->
+  <div class="top-left-brand">
+    <img src="images/logo.png" alt="Joully Logo" class="brand-logo">
+    <span class="brand-text">Joully</span>
+  </div>
+
+  <!-- Окно авторизации -->
+  <div class="auth-card" id="authContainer">
+    
+    <!-- ФОРМА 1: ВХОД -->
+    <div class="auth-form-container" id="loginSection">
+      <div class="auth-header">
+        <h2>С возвращением!</h2>
+        <p>Мы так рады видеть вас снова!</p>
+      </div>
+
+      <form class="auth-form" id="loginForm">
+        <div class="input-group">
+          <label for="email">Адрес электронной почты или имя пользователя <span class="required">*</span></label>
+          <input type="text" id="email" autocomplete="off" required>
+        </div>
+
+        <div class="input-group">
+          <label for="password">Пароль <span class="required">*</span></label>
+          <input type="password" id="password" required>
+          <a href="#" class="forgot-link">Забыли пароль?</a>
+        </div>
+
+        <button type="submit" class="submit-btn">Вход</button>
+
+        <div class="auth-footer">
+          <span>Нужен аккаунт?</span>
+          <a href="#" class="register-link" id="toRegisterBtn">Зарегистрироваться</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- ФОРМА 2: РЕГИСТРАЦИЯ -->
+    <div class="auth-form-container hidden" id="registerSection">
+      <div class="auth-header">
+        <h2>Создать учетную запись</h2>
+      </div>
+
+      <form class="auth-form" id="registerForm">
+        <div class="input-group">
+          <label for="reg-email">Email <span class="required">*</span></label>
+          <input type="email" id="reg-email" autocomplete="off" required>
+        </div>
+
+        <div class="input-group">
+          <label for="reg-username">Имя пользователя <span class="required">*</span></label>
+          <input type="text" id="reg-username" autocomplete="off" required>
+        </div>
+
+        <div class="input-group">
+          <label for="reg-password">Пароль <span class="required">*</span></label>
+          <input type="password" id="reg-password" required>
+        </div>
+
+        <button type="submit" class="submit-btn">Продолжить</button>
+
+        <div class="auth-footer">
+          <a href="#" class="register-link" id="toLoginBtn">Уже есть аккаунт?</a>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>
