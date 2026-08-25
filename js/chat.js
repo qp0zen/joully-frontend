@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const SERVER_IP = '2.26.86.113'; // Твой IP сервера
-    const SERVER_URL = `http://${SERVER_IP}:8000`;
-    const WS_URL = `ws://${SERVER_IP}:8000/ws`; // URL для вебсокетов
+    // Используем защищенный поддомен, который вы только что создали
+    const SERVER_URL = 'https://joully.ru'; 
+    const WS_URL = 'wss://api.joully.ru/ws'; // wss:// — это безопасный веб-сокет (SSL)
   
     const messageForm = document.getElementById('messageForm');
     const messageInput = document.getElementById('messageInput');
