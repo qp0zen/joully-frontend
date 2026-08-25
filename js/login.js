@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
           alert(`Ошибка: ${data.detail}`);
         }
       } catch (error) {
-        alert('Ошибка соединения с Python сервером.');
+        alert('Ошибка соединения с сервером.');
       }
     });
   
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
           alert(`Ошибка регистрации: ${data.detail}`);
         }
       } catch (error) {
-        alert('Ошибка соединения с Python сервером.');
+        alert('Ошибка соединения с сервером.');
       }
     });
   });
