@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     // Используем защищенный поддомен, который вы только что создали
-    const SERVER_URL = 'https://joully.ru'; 
+    const SERVER_URL = 'https://api.joully.ru'; 
     const WS_URL = 'wss://api.joully.ru/ws'; // wss:// — это безопасный веб-сокет (SSL)
   
     const messageForm = document.getElementById('messageForm');
